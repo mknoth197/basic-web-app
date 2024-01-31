@@ -1,4 +1,5 @@
 export default function handler(req, res) {
+    // simulates a query to a Data Source
     res.status(200).json({
         pizzas: [
             {

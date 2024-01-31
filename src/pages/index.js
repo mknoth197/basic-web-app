@@ -1,6 +1,30 @@
 import Head from "next/head";
+import { useEffect, useState } from "react";
 
+const initialState = [];
 export default function Home() {
+    // state stores dynamic values that come from outside the file. Via API or user input
+
+    // Start this way
+    // const result = useState([])
+    // const currentState = result[0]
+    // const setPizzas = result[1]
+
+    // Then showcase this
+    const [pizzas, setPizzas] = useState(initialState);
+    console.log(pizzas);
+
+    // Is used to do anything async aka API Calls - only called once after page load
+    useEffect(() => {
+        fetch("/api/pizzas")
+            .then((responseStream) => {
+                return responseStream.json(); // started to receive response from server
+            })
+            .then((pizzasResponse) => {
+                setPizzas(pizzasResponse.pizzas); // Request is done. Have respone - first state transition
+            });
+    });
+
     return (
         <>
             <Head>
@@ -15,7 +39,11 @@ export default function Home() {
                 />
                 <link rel="icon" href="/favicon.ico" />
             </Head>
-            <main></main>
+            <main>
+                {pizzas.map((pizza, index) => {
+                    return <div key={index}>{pizza.name}</div>;
+                })}
+            </main>
         </>
     );
 }
